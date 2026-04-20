@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript 基础知识练习</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .section {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px 28px;
+      margin: 18px auto;
+      max-width: 760px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .section h2 {
+      color: #2980b9;
+      border-left: 4px solid #2980b9;
+      padding-left: 10px;
+    }
+    pre {
+      background: #f7f9fc;
+      border: 1px solid #d0dce8;
+      border-radius: 5px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .output {
+      background: #eafaf1;
+      border: 1px solid #a9dfbf;
+      border-radius: 5px;
+      padding: 10px 16px;
+      margin-top: 10px;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .output-label {
+      font-weight: bold;
+      color: #27ae60;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>JavaScript 基础知识练习</h1>
+
+  <!-- ① 变量的定义 -->
+  <div class="section">
+    <h2>① 变量的定义</h2>
+    <pre id="code1"></pre>
+    <div class="output-label">▶ 运行结果：</div>
+    <div class="output" id="out1"></div>
+  </div>
+
+  <!-- ② 变量类型 -->
+  <div class="section">
+    <h2>② 变量类型</h2>
+    <pre id="code2"></pre>
+    <div class="output-label">▶ 运行结果：</div>
+    <div class="output" id="out2"></div>
+  </div>
+
+  <!-- ③ 表达式 -->
+  <div class="section">
+    <h2>③ 表达式</h2>
+    <pre id="code3"></pre>
+    <div class="output-label">▶ 运行结果：</div>
+    <div class="output" id="out3"></div>
+  </div>
+
+  <!-- ④ 流程控制 -->
+  <div class="section">
+    <h2>④ 流程控制</h2>
+    <pre id="code4"></pre>
+    <div class="output-label">▶ 运行结果：</div>
+    <div class="output" id="out4"></div>
+  </div>
+
+  <!-- ⑤ 函数 -->
+  <div class="section">
+    <h2>⑤ 函数</h2>
+    <pre id="code5"></pre>
+    <div class="output-label">▶ 运行结果：</div>
+    <div class="output" id="out5"></div>
+  </div>
+
+  <script>
+    // ============================================================
+    // 工具：将 console.log 的输出同时渲染到页面对应区域
+    // ============================================================
+    function makeLogger(outId) {
+      return function(...args) {
+        const el = document.getElementById(outId);
+        el.textContent += args.join(" ") + "\n";
+      };
+    }
+
+    // ============================================================
+    // ① 变量的定义
+    //    var  —— 函数作用域，可重复声明，存在变量提升
+    //    let  —— 块级作用域，不可重复声明
+    //    const—— 块级作用域，声明时必须赋值且不可重新赋值
+    // ============================================================
+    (function section1() {
+      const code = `// var：函数作用域，存在变量提升
+var city = "厦门";
+var city = "北京";   // 允许重复声明
+console.log("var city =", city);
+
+// let：块级作用域，不可重复声明
+let score = 90;
+score = 95;          // 可以重新赋值
+console.log("let score =", score);
+
+// const：常量，声明后不可重新赋值
+const PI = 3.14159;
+console.log("const PI =", PI);
+
+// 变量提升示例
+console.log("提升前访问 hoisted =", hoisted); // undefined（提升但未赋值）
+var hoisted = "已赋值";
+console.log("提升后访问 hoisted =", hoisted);`;
+
+      document.getElementById("code1").textContent = code;
+
+      const log = makeLogger("out1");
+
+      // var：函数作用域，存在变量提升
+      var city = "厦门";
+      var city = "北京";
+      log("var city =", city);
+
+      // let：块级作用域
+      let score = 90;
+      score = 95;
+      log("let score =", score);
+
+      // const：常量
+      const PI = 3.14159;
+      log("const PI =", PI);
+    })();
+
+
+    // ============================================================
+    // ② 变量类型
+    //    基本类型：number / string / boolean / null / undefined / symbol / bigint
+    //    引用类型：object（含 array、function）
+    // ============================================================
+    (function section2() {
+      const code = `// 基本类型
+let age     = 21;               // Number
+let name    = "张三";           // String
+let isOk    = true;             // Boolean
+let nothing = null;             // Null
+let undef;                      // Undefined（未赋值）
+let id      = Symbol("uid");    // Symbol
+
+// 引用类型
+let arr  = [1, 2, 3];           // Array
+let obj  = { x: 10, y: 20 };   // Object
+let greet = function() {};      // Function
+
+// typeof 检测类型
+console.log(typeof age,    "→", age);
+console.log(typeof name,   "→", name);
+console.log(typeof isOk,   "→", isOk);
+console.log(typeof nothing,"→", nothing);  // "object"（JS 历史遗留）
+console.log(typeof undef,  "→", undef);
+console.log(typeof id,     "→", id.toString());
+console.log(typeof arr,    "→", arr);
+console.log(typeof obj,    "→", JSON.stringify(obj));
+console.log(typeof greet,  "→ [Function]");
+
+// 类型转换
+console.log("字符串转数字：", Number("42"), Number("3.14"), Number("abc"));
+console.log("数字转字符串：", String(100), (255).toString(16));
+console.log("转布尔值：",     Boolean(0), Boolean(""), Boolean(1), Boolean("hi"));`;
+
+      document.getElementById("code2").textContent = code;
+
+      const log = makeLogger("out2");
+
+      let age     = 21;
+      let name    = "张三";
+      let isOk    = true;
+      let nothing = null;
+      let undef;
+      let id      = Symbol("uid");
+      let arr     = [1, 2, 3];
+      let obj     = { x: 10, y: 20 };
+      let greet   = function() {};
+
+      log(typeof age,    "→", age);
+      log(typeof name,   "→", name);
+      log(typeof isOk,   "→", isOk);
+      log(typeof nothing,"→", nothing);
+      log(typeof undef,  "→", undef);
+      log(typeof id,     "→", id.toString());
+      log(typeof arr,    "→", arr);
+      log(typeof obj,    "→", JSON.stringify(obj));
+      log(typeof greet,  "→ [Function]");
+
+      log("字符串转数字：", Number("42"), Number("3.14"), Number("abc"));
+      log("数字转字符串：", String(100), (255).toString(16));
+      log("转布尔值：",     Boolean(0), Boolean(""), Boolean(1), Boolean("hi"));
+    })();
+
+
+    // ============================================================
+    // ③ 表达式
+    //    算术、赋值、比较、逻辑、三元、字符串拼接 / 模板字符串
+    // ============================================================
+    (function section3() {
+      const code = `// 算术运算符
+let a = 17, b = 5;
+console.log("a + b =", a + b);
+console.log("a - b =", a - b);
+console.log("a * b =", a * b);
+console.log("a / b =", a / b);
+console.log("a % b =", a % b, "（取余）");
+console.log("a ** 2 =", a ** 2, "（幂运算）");
+
+// 赋值运算符
+let x = 10;
+x += 5;  console.log("x += 5 →", x);
+x -= 3;  console.log("x -= 3 →", x);
+x *= 2;  console.log("x *= 2 →", x);
+x /= 4;  console.log("x /= 4 →", x);
+
+// 比较运算符（== 宽松 vs === 严格）
+console.log("5 == '5'  →", 5 == "5",  "（宽松，类型转换）");
+console.log("5 === '5' →", 5 === "5", "（严格，不转换）");
+console.log("10 > 3 →", 10 > 3);
+
+// 逻辑运算符
+console.log("true && false →", true && false);
+console.log("true || false →", true || false);
+console.log("!true →", !true);
+
+// 三元表达式
+let score = 75;
+let grade = score >= 60 ? "及格" : "不及格";
+console.log("成绩", score, "→", grade);
+
+// 模板字符串
+let student = "李四";
+console.log(\`\${student} 的成绩是 \${score} 分，评定：\${grade}\`);`;
+
+      document.getElementById("code3").textContent = code;
+
+      const log = makeLogger("out3");
+
+      let a = 17, b = 5;
+      log("a + b =", a + b);
+      log("a - b =", a - b);
+      log("a * b =", a * b);
+      log("a / b =", a / b);
+      log("a % b =", a % b, "（取余）");
+      log("a ** 2 =", a ** 2, "（幂运算）");
+
+      let x = 10;
+      x += 5; log("x += 5 →", x);
+      x -= 3; log("x -= 3 →", x);
+      x *= 2; log("x *= 2 →", x);
+      x /= 4; log("x /= 4 →", x);
+
+      log("5 == '5'  →", 5 == "5",  "（宽松，类型转换）");
+      log("5 === '5' →", 5 === "5", "（严格，不转换）");
+      log("10 > 3 →", 10 > 3);
+
+      log("true && false →", true && false);
+      log("true || false →", true || false);
+      log("!true →", !true);
+
+      let score = 75;
+      let grade = score >= 60 ? "及格" : "不及格";
+      log("成绩", score, "→", grade);
+
+      let student = "李四";
+      log(`${student} 的成绩是 ${score} 分，评定：${grade}`);
+    })();
+
+
+    // ============================================================
+    // ④ 流程控制
+    //    if-else / switch / for / while / do-while / break / continue
+    // ============================================================
+    (function section4() {
+      const code = `// --- if / else if / else ---
+let temperature = 28;
+if (temperature > 35) {
+  console.log("天气：高温预警");
+} else if (temperature >= 20) {
+  console.log("天气：舒适");
+} else {
+  console.log("天气：较凉");
+}
+
+// --- switch ---
+let day = 3;
+switch (day) {
+  case 1: console.log("周一"); break;
+  case 2: console.log("周二"); break;
+  case 3: console.log("周三"); break;
+  default: console.log("其他");
+}
+
+// --- for 循环（1~10 的和）---
+let sum = 0;
+for (let i = 1; i <= 10; i++) {
+  sum += i;
+}
+console.log("1~10 之和 =", sum);
+
+// --- while 循环（倒计时）---
+let count = 3;
+while (count > 0) {
+  console.log("倒计时：", count);
+  count--;
+}
+
+// --- do-while（至少执行一次）---
+let n = 0;
+do {
+  console.log("do-while n =", n);
+  n++;
+} while (n < 1);
+
+// --- break / continue ---
+console.log("偶数（break at 8）：");
+for (let i = 0; i <= 10; i++) {
+  if (i === 8) break;
+  if (i % 2 !== 0) continue;
+  process.stdout.write(i + " ");  // 浏览器端改为累加字符串
+}`;
+
+      document.getElementById("code4").textContent = code;
+
+      const log = makeLogger("out4");
+
+      // if-else
+      let temperature = 28;
+      if (temperature > 35) {
+        log("天气：高温预警");
+      } else if (temperature >= 20) {
+        log("天气：舒适");
+      } else {
+        log("天气：较凉");
+      }
+
+      // switch
+      let day = 3;
+      switch (day) {
+        case 1: log("周一"); break;
+        case 2: log("周二"); break;
+        case 3: log("周三"); break;
+        default: log("其他");
+      }
+
+      // for
+      let sum = 0;
+      for (let i = 1; i <= 10; i++) { sum += i; }
+      log("1~10 之和 =", sum);
+
+      // while
+      let count = 3;
+      while (count > 0) { log("倒计时：", count); count--; }
+
+      // do-while
+      let n = 0;
+      do { log("do-while n =", n); n++; } while (n < 1);
+
+      // break / continue
+      let line = "偶数（break at 8）：";
+      for (let i = 0; i <= 10; i++) {
+        if (i === 8) break;
+        if (i % 2 !== 0) continue;
+        line += i + " ";
+      }
+      log(line);
+    })();
+
+
+    // ============================================================
+    // ⑤ 函数
+    //    函数声明 / 函数表达式 / 箭头函数 / 默认参数 / 剩余参数 / 递归 / 闭包
+    // ============================================================
+    (function section5() {
+      const code = `// 函数声明（存在提升）
+function add(a, b) {
+  return a + b;
+}
+console.log("add(3, 4) =", add(3, 4));
+
+// 函数表达式
+const multiply = function(a, b) {
+  return a * b;
+};
+console.log("multiply(6, 7) =", multiply(6, 7));
+
+// 箭头函数（Arrow Function）
+const square = n => n * n;
+console.log("square(9) =", square(9));
+
+// 默认参数
+function greet(name = "世界") {
+  return \`你好，\${name}！\`;
+}
+console.log(greet());
+console.log(greet("同学"));
+
+// 剩余参数（...args）
+function sumAll(...nums) {
+  return nums.reduce((acc, v) => acc + v, 0);
+}
+console.log("sumAll(1,2,3,4,5) =", sumAll(1, 2, 3, 4, 5));
+
+// 递归（计算阶乘）
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+console.log("5! =", factorial(5));
+
+// 闭包（Closure）：内部函数访问外部函数的变量
+function makeCounter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+const counter = makeCounter();
+console.log("counter() =", counter());
+console.log("counter() =", counter());
+console.log("counter() =", counter());`;
+
+      document.getElementById("code5").textContent = code;
+
+      const log = makeLogger("out5");
+
+      function add(a, b) { return a + b; }
+      log("add(3, 4) =", add(3, 4));
+
+      const multiply = function(a, b) { return a * b; };
+      log("multiply(6, 7) =", multiply(6, 7));
+
+      const square = n => n * n;
+      log("square(9) =", square(9));
+
+      function greet(name = "世界") { return `你好，${name}！`; }
+      log(greet());
+      log(greet("同学"));
+
+      function sumAll(...nums) { return nums.reduce((acc, v) => acc + v, 0); }
+      log("sumAll(1,2,3,4,5) =", sumAll(1, 2, 3, 4, 5));
+
+      function factorial(n) { return n <= 1 ? 1 : n * factorial(n - 1); }
+      log("5! =", factorial(5));
+
+      function makeCounter() {
+        let count = 0;
+        return function() { return ++count; };
+      }
+      const counter = makeCounter();
+      log("counter() =", counter());
+      log("counter() =", counter());
+      log("counter() =", counter());
+    })();
+  </script>
+</body>
+</html>
